@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from ctypes import windll
 from tkinter.messagebox import showinfo
+from Algorithms import Algorithm
 
 
 class App(tk.Tk):
@@ -113,11 +114,6 @@ def colorQueueSubmit():
     )
 
 
-class Algorithm:
-    def __init__(self, algo):
-        self.algo = algo
-
-
 class InputPopUp:
     def __init__(self, master):
         self.drawPopUp()
@@ -152,40 +148,21 @@ class InputPopUp:
         submitButton.pack(side=tk.LEFT)
 
         root.algoChoice = tk.StringVar()
-        msg2 = tk.Label(root.frame2, text="Choose which algorithm do you want to choose")
+        msg2 = tk.Label(root.frame2, text="Choose which algorithm do you want to choose\n 1)A*\t2)Uniform Cost")
         msg2.pack()
         entry = ttk.Entry(root.frame2, textvariable=root.algoChoice)
         entry.pack(fill='x', expand=True, side=tk.LEFT)
         choiceButton = ttk.Button(root.frame2, text="Submit",
-                                  command=lambda: self.getAlgoChoiceInput(root.algoChoice.get(),root))
+                                  command=lambda: self.getAlgoChoiceInput(root.algoChoice.get(), root))
         choiceButton.pack(side=tk.LEFT)
-        """msg2 = tk.Label(root.frame2, text="Choose which algorithm do you want to choose")
-        msg2.pack()
-        entry = ttk.Entry(root.frame2, textvariable=root.algoChoice)
-        entry.pack(fill='x', expand=True, side=tk.LEFT)
-        rb1 = ttk.Radiobutton(root.frame2, text='A* search', variable=self.selectedRadio, value=1,
-                              command=self.selected)
-        rb2 = ttk.Radiobutton(root.frame2, text='Uniform cost search', variable=self.selectedRadio, value=2,
-                              command=self.selected)
-        rb1.pack()
-        rb2.pack()
-        choiceButton = ttk.Button(root.frame2, text="Submit",
-                                  command=lambda: self.getAlgoChoices())
-        choiceButton.pack(side=tk.LEFT)"""
 
-    def selected(self):
-        if self.selectedRadio.get() == 0:
-            self.radioText = "A*"
-        elif self.selectedRadio.get() == 1:
-            self.radioText = "Uniform Cost"
-        else:
-            "do something"
-
-        print(self.selectedRadio)
-        print(self.radioText)
-
-    def getAlgoChoiceInput(self, param,root):
+    def getAlgoChoiceInput(self, param, root):
         print(param)
+        if (int(param) == 1):
+            Algorithm.A_StarSearch(self)
+        elif (int(param) == 2):
+            Algorithm.UniformCost(self)
+
         self.close += 1
         if (self.close == 2):
             root.destroy()
