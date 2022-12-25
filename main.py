@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 from ctypes import windll
-from tkinter.messagebox import showinfo
 from Algorithms import Algorithm
 
 
@@ -54,7 +53,7 @@ class App(tk.Tk):
                 for j in range(3):
                     self.b[i][j]["state"] = "disabled"
 
-        print(self.memoryColors[-1].i, self.memoryColors[-1].j)
+        # print(self.memoryColors[-1].i, self.memoryColors[-1].j)
 
     def fill2(self, i, j):
         self.g[i][j]["bg"] = self.colors[self.count2]
@@ -67,7 +66,7 @@ class App(tk.Tk):
                 for j in range(3):
                     self.g[i][j]["state"] = "disabled"
 
-            InputPopUp(self)
+            InputPopUp(self.b, self.g)
 
     def draw_puzzleInitial(self):
         for i in range(3):
@@ -106,22 +105,15 @@ class Color:
         self.name = name
 
 
-def colorQueueSubmit():
-    msg = f"You entered {input.get()}"
-    showinfo(
-        title='Information',
-        message=msg
-    )
-
-
 class InputPopUp:
-    def __init__(self, master):
+    def __init__(self, b, g):
         self.drawPopUp()
         self.selectedRadio = tk.IntVar()
         self.selectedRadio.set(1)
         self.radioText = ""
-        self.master = master
         self.close = 0
+        self.b = b
+        self.g = g
 
     def getAlgoOrderInput(self, txt):
         print(txt)
@@ -159,9 +151,9 @@ class InputPopUp:
     def getAlgoChoiceInput(self, param, root):
         print(param)
         if (int(param) == 1):
-            Algorithm.A_StarSearch(self)
+            Algorithm(self.b, self.g).A_StarSearch()
         elif (int(param) == 2):
-            Algorithm.UniformCost(self)
+            Algorithm(self.b, self.g).UniformCost()
 
         self.close += 1
         if (self.close == 2):
