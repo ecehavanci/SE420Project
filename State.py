@@ -1,97 +1,50 @@
-from queue import Queue
-
-# Represents a state of the board
 class State:
-  def __init__(self, board, cost, prev_move):
-    self.board = board
-    self.cost = cost
-    self.prev_move = prev_move
+    def __init__(self, initialTiles):  # current & next move
+        self.initialTiles = initialTiles
+        self.cost = 0
+        self.lastMovedTileColor = ""
 
-# Returns the sequence of moves required to solve the board
-def search(initial_state, goal_state, strategy):
-  if strategy == "uniform_cost":
-    # Use a priority queue to perform uniform cost search
-    queue = PriorityQueue()
-  else:
-    # Use a regular queue to perform A* search
-    queue = Queue()
+    def setCost(self, cost):
+        self.cost = cost
 
-  # Add the initial state to the queue
-  queue.put(initial_state)
+    def getCost(self):
+        return self.cost
 
-  # Keep track of the visited states
-  visited = set()
+    def setLastMovedTileColor(self, lastMovedTileColor):
+        self.lastMovedTileColor = lastMovedTileColor
 
-  while not queue.empty():
-    current_state = queue.get()
+    def getLastMovedTileColor(self):
+        return self.lastMovedTileColor
 
-    # Check if the current state is the goal state
-    if current_state.board == goal_state:
-      # Return the sequence of moves required to solve the board
-      return current_state.prev_move
+    def isEqual(self, State):
+        for i in range(3):
+            for j in range(3):
+                if (self.initialTiles[i][j] != State.initialTiles[i][j]):
+                    return False
+        return True
 
-    # Mark the current state as visited
-    visited.add(tuple(current_state.board))
+    def getTiles(self):
+        return self.initialTiles
 
-    # Generate the next states
-    next_states = generate_next_states(current_state)
+    def findTilePlaceByColor(self, TileColor):
+        # tile i,j for entered initial states
+        for i in range(3):
+            for j in range(3):
+                if str(self.initialTiles[i][j]["bg"]) == TileColor:
+                    return [i, j]
+        return 0
 
-    for next_state in next_states:
-      # Calculate the cost of reaching this state
-      if strategy == "uniform_cost":
-        cost = next_state.cost
-    
-      else:
-  # Use the Hamming distance as the heuristics for A* search
-        cost = next_state.cost + heuristics(next_state.board, goal_state)
+    def isTileColored(self, TilePlace):   #coordinate
+        list = ["blue", "red", "green"]
+        # tile i,j for entered initiaal states
+        for i in range(3):
+            for j in range(3):
+                if str(self.initialTiles[TilePlace[i]][TilePlace[j]]["bg"]) in list:
+                    return False
+        return True
 
-# Add the next state to the queue if it has not been visited
-      if tuple(next_state.board) not in visited:
-        queue.put(next_state)
+    def findTileColorByPlace(self, TilePlace):
+        return self.initialTiles[TilePlace[0]][TilePlace[1]]
 
-# Generates the next states that can be reached from the current state
-def generate_next_states(current_state):
-  next_states = []
-
-  # Find the position of the empty cell (represented by 0)
-  i, j = find_empty_cell(current_state.board)
-
-  # Move the empty cell up, down, left, or right
-  if i > 0:
-    next_board = move(current_state.board, i, j, i-1, j)
-    next_states.append(State(next_board, current_state.cost+1, current_state.prev_move+[(i, j, i-1, j)]))
-  if i < 2:
-    next_board = move(current_state.board, i, j, i+1, j)
-    next_states.append(State(next_board, current_state.cost+1, current_state.prev_move+[(i, j, i+1, j)]))
-  if j > 0:
-    next_board = move(current_state.board, i, j, i, j-1)
-    next_states.append(State(next_board, current_state.cost+1, current_state.prev_move+[(i, j, i, j-1)]))
-  if j < 2:
-    next_board = move(current_state.board, i, j, i, j+1)
-    next_states.append(State(next_board, current_state.cost+1, current_state.prev_move+[(i, j, i, j+1)]))
-
-  return next_states
-
-# Moves the cell at (i, j) to (x, y) on the board and returns the resulting board
-def move(board, i, j, x, y):
-  new_board = [row[:] for row in board]
-  new_board[x][y], new_board[i][j] = new_board[i][j], new_board[x][y]
-  return new_board
-
-# Finds the position of the empty cell (represented by 0) on the board
-def find_empty_cell(board):
-  for i in range(3):
-    for j in range(3):
-      if board[i][j] == 0:
-        return i, j
-
-# Calculates the Hamming distance between the current state and the goal state
-def heuristics(current_state, goal_state):
-  distance = 0
-  for i in range(3):
-    for j in range(3):
-      if current_state[i][j] != goal_state[i][j]:
-        distance += 1
-  return distance
-
-
+    def setTiles(self, Tiles):
+        self.initialTiles = Tiles

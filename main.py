@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from ctypes import windll
-from Algorithms import Algorithm
+
 
 
 class App(tk.Tk):
@@ -114,9 +114,11 @@ class InputPopUp:
         self.close = 0
         self.b = b
         self.g = g
+        self.algoOrder = ""
 
     def getAlgoOrderInput(self, txt):
         print(txt)
+        self.algoOrder = txt.split(",")
         self.close += 1
 
     def drawPopUp(self):
@@ -150,10 +152,7 @@ class InputPopUp:
 
     def getAlgoChoiceInput(self, param, root):
         print(param)
-        if (int(param) == 1):
-            Algorithm(self.b, self.g).A_StarSearch()
-        elif (int(param) == 2):
-            Algorithm(self.b, self.g).UniformCost()
+
 
         self.close += 1
         if (self.close == 2):
